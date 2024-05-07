@@ -63,7 +63,7 @@ public class ImgQuadTree {
 	}
 	
 	public int[][] getImageArray() {
-		final int LENGTH = 8;
+		final int LENGTH = 256;
 		final int QUARTER = 1;
 		return getImageArrayHelper(new int[LENGTH][LENGTH], root, LENGTH, QUARTER);
 	}
@@ -72,11 +72,10 @@ public class ImgQuadTree {
 		if (length < 1)
 			return arr;
 		if (current.intensityLevel == -1) {
-			int[][] small_arr = new int[length/2][length/2];
-			int[][] q1 = getImageArrayHelper(small_arr, current.leftNode, length/2, 1);
-			int[][] q2 = getImageArrayHelper(small_arr, current.midLeftNode, length/2, 2);
-			int[][] q3 = getImageArrayHelper(small_arr, current.midRightNode, length/2, 3);
-			int[][] q4 = getImageArrayHelper(small_arr, current.rightNode, length/2, 4);
+			int[][] q1 = getImageArrayHelper(new int[length/2][length/2], current.leftNode, length/2, 1);
+			int[][] q2 = getImageArrayHelper(new int[length/2][length/2], current.midLeftNode, length/2, 2);
+			int[][] q3 = getImageArrayHelper(new int[length/2][length/2], current.midRightNode, length/2, 3);
+			int[][] q4 = getImageArrayHelper(new int[length/2][length/2], current.rightNode, length/2, 4);
 			copy2DArray(q1, arr, 0, 0);
 			copy2DArray(q2, arr,0, length/2);
 			copy2DArray(q3, arr, length/2, 0);
