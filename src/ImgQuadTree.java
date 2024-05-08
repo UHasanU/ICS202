@@ -49,17 +49,30 @@ public class ImgQuadTree {
 	}
 
 	public int getNumNodes() {
-
-		
-		
-		return 0;		// STUB: REMOVE THIS LINE
+		return getNumNodesHelper(root);
 	}
+
+	public int getNumNodesHelper(QTNode current) {
+		if (current == null)
+			return 0;
+		return 1 + getNumNodesHelper(current.leftNode) + getNumNodesHelper(current.midLeftNode)
+				+ getNumNodesHelper(current.midRightNode) + getNumNodesHelper(current.rightNode);
+	}
+
+
 	
 	public int getNumLeaves() {
+		return getNumLeavesHelper(root);
+	}
 
-		
-		
-		return 0;		// STUB: REMOVE THIS LINE
+	public int getNumLeavesHelper(QTNode current) {
+		if (current == null)
+			return 0;
+		if (current.intensityLevel == -1)
+			return getNumLeavesHelper(current.leftNode) + getNumLeavesHelper(current.midLeftNode)
+					+ getNumLeavesHelper(current.midRightNode) + getNumLeavesHelper(current.rightNode);
+		else
+			return 1;
 	}
 	
 	public int[][] getImageArray() {
