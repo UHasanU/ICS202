@@ -4,7 +4,16 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class ImgQuadTree {
-
+	/*
+	 * This function takes
+	 * src: a source 2D array (a quarter of a bigger array)
+	 * dest: a destination array (The bigger array in which the destination is a quarter of it)
+	 * startRow: a starting row i.e. 0 for Q1, length/2 for Q3, etc...
+	 * startCol: a starting column i.e. 0 for Q1, length/2 for Q2, etc...
+	 * Note this is the order of the quarters:
+	 * Q1 Q2
+	 * Q3 Q4
+	 */
 	public static void copy2DArray(int[][] src, int[][] dest, int startRow, int startCol) {
 		for (int i = 0; i < src.length; i++) {
 			for (int j = 0; j < src[i].length; j++) {
@@ -15,7 +24,11 @@ public class ImgQuadTree {
 		}
 	}
 
-	QTNode root = new QTNode();
+	QTNode root = new QTNode(); // Define a global root to be used in different functions
+
+	/*
+	 * This function takes a file name as a string, and hand a Scanner of it to the buildTree function
+	 */
 	public ImgQuadTree(String filename){
 		try {
 			Scanner reader = new Scanner(new File(filename));
@@ -24,14 +37,21 @@ public class ImgQuadTree {
 		} catch (FileNotFoundException e) {
 			System.out.println("File is not found");
 		}
-
-
-
 	}
 
+	/*
+	 * This functions takes
+	 * reader: a Scanner to read the next entries in the txt file
+	 * current: The current node we are working on
+	 * The mechanism of this function is that it read an integer with two cases:
+	 * * if entry is -1: The function calls itself recursively, forming the subtrees
+	 and assigning them to the correct references
+	 * * else the function creates a node with the intensity level and return it,
+	 creating a node that'll be a part of a subtree
+	 * When the function finishes building the tree, it will finish the if statement and goes to the return statement,
+	 making that the base case
+	 */
 	public QTNode buildTree(Scanner reader, QTNode current) {
-		if (! reader.hasNextInt())
-			return root;
 		int entry = reader.nextInt();
 		if (entry == -1) {
 			current = new QTNode(-1);
@@ -51,7 +71,10 @@ public class ImgQuadTree {
 	public int getNumNodes() {
 		return getNumNodesHelper(root);
 	}
-
+	/*
+	 * This function will traverse the tree recursively adding 1 with each call, unless the current is null,
+	 in which the function will return 0, leading to the end of the function call
+	 */
 	public int getNumNodesHelper(QTNode current) {
 		if (current == null)
 			return 0;
@@ -64,7 +87,10 @@ public class ImgQuadTree {
 	public int getNumLeaves() {
 		return getNumLeavesHelper(root);
 	}
-
+	/*
+	 * This function will traverse the tree recursively similarly to the previous function,
+	 but will only add 1 when the intensity level is not 1 i.e. there's no children, meaning it's a leaf node
+	 */
 	public int getNumLeavesHelper(QTNode current) {
 		if (current == null)
 			return 0;
@@ -76,19 +102,29 @@ public class ImgQuadTree {
 	}
 	
 	public int[][] getImageArray() {
-		final int LENGTH = 256;
-		final int QUARTER = 1;
-		return getImageArrayHelper(new int[LENGTH][LENGTH], root, LENGTH, QUARTER);
+		final int LENGTH = 256;  // The number of pixels in one side of the square picture
+		return getImageArrayHelper(new int[LENGTH][LENGTH], root, LENGTH);
 	}
 
-	public int[][] getImageArrayHelper(int[][] arr, QTNode current, int length, int quarter) {
+	/*
+	 * This function will take the tree, will recursively create arrays that represent the leaf nodes,
+	 and then combine them into the correct position in the bigger array, until filling in original 256*256 array
+	 * This is done through the following:
+	 * * Base case: if the length is less than 1, then we already finished creating the array
+	 and should proceed into combining
+	 * * Recursive case 1: if the node is not leaf, then we call the function again with an array with quarter the size
+	 to return a quarter of the array in the previous call. After gathering the four quarters of the array, we proceed with combining
+	 the quarters into their correct positions and returning the array to be used in the previous function calls.
+	 * * Recursive case 2: if the node is leaf, take the size of the given array and fill it with the intensity value
+	 */
+	public int[][] getImageArrayHelper(int[][] arr, QTNode current, int length) {
 		if (length < 1)
 			return arr;
 		if (current.intensityLevel == -1) {
-			int[][] q1 = getImageArrayHelper(new int[length/2][length/2], current.leftNode, length/2, 1);
-			int[][] q2 = getImageArrayHelper(new int[length/2][length/2], current.midLeftNode, length/2, 2);
-			int[][] q3 = getImageArrayHelper(new int[length/2][length/2], current.midRightNode, length/2, 3);
-			int[][] q4 = getImageArrayHelper(new int[length/2][length/2], current.rightNode, length/2, 4);
+			int[][] q1 = getImageArrayHelper(new int[length/2][length/2], current.leftNode, length/2);
+			int[][] q2 = getImageArrayHelper(new int[length/2][length/2], current.midLeftNode, length/2);
+			int[][] q3 = getImageArrayHelper(new int[length/2][length/2], current.midRightNode, length/2);
+			int[][] q4 = getImageArrayHelper(new int[length/2][length/2], current.rightNode, length/2);
 			copy2DArray(q1, arr, 0, 0);
 			copy2DArray(q2, arr,0, length/2);
 			copy2DArray(q3, arr, length/2, 0);
