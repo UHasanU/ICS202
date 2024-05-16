@@ -6,11 +6,8 @@ import java.util.Scanner;
 
 public class ImgQuadTreeFileCreator {
     public ImgQuadTreeFileCreator(String filename, int length) {
-        try {
-            int[][] imageArray;
-            try (Scanner reader = new Scanner(new File(filename))) {
-                imageArray = getImageArray(reader, length);
-            }
+        try (Scanner reader = new Scanner(new File(filename))) {
+            int[][] imageArray = getImageArray(reader, length);
             ArrayList<Integer> traversal = getPreOrderTraversal(imageArray);
             writeTraversal(traversal);
         } catch (FileNotFoundException e) {
