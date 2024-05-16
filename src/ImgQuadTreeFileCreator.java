@@ -1,15 +1,16 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class ImgQuadTreeFileCreator {
     public ImgQuadTreeFileCreator(String filename, int length) {
         try {
-            Scanner reader = new Scanner(new File(filename));
-            int[][] imageArray = getImageArray(reader, length);
+            int[][] imageArray;
+            try (Scanner reader = new Scanner(new File(filename))) {
+                imageArray = getImageArray(reader, length);
+            }
             ArrayList<Integer> traversal = getPreOrderTraversal(imageArray);
             writeTraversal(traversal);
         } catch (FileNotFoundException e) {
@@ -47,7 +48,12 @@ public class ImgQuadTreeFileCreator {
     }
 
     public void writeTraversal(ArrayList<Integer> preOrderTraversal) {
-
+            try (PrintWriter writer = new PrintWriter("QuadTree.txt")) {
+                for (int el : preOrderTraversal)
+                    writer.println(el);
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found");;
+            }
     }
 
     public static boolean isOneValue(int[][] arr) {
@@ -60,16 +66,16 @@ public class ImgQuadTreeFileCreator {
     }
 
     public static int[][] getQuarter(int[][] arr, int quarter) {
-        int[][] quarterArr = new int[arr.length/2][arr.length/2];
-        if (quarter == 1)
-            for (int row = 0; row < arr.length / 2; row++)
-                System.arraycopy(arr[row], 0, quarterArr[row], 0, arr.length / 2);
-        if (quarter == 2)
-            for (int row = 0; row < arr.length/2; row++) {
-                for (int column = arr.length/2; column < arr.length; column++) {
+        int quarterLength = arr.length / 2;
+        int[][] quarterArr = new int[quarterLength][quarterLength];
 
-                }
+        int rowStart = (quarter == 3 || quarter == 4) ? quarterLength : 0;
+        int colStart = (quarter == 2 || quarter == 4) ? quarterLength : 0;
 
-            }
+        for (int row = 0; row < quarterLength; row++)
+            for (int col = 0; col < quarterLength; col++)
+                quarterArr[row][col] = arr[row + rowStart][col + colStart];
+
+        return quarterArr;
     }
 }

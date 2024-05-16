@@ -3,7 +3,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        ImgQuadTree q = new ImgQuadTree("data.txt");
-        System.out.println(q.getNumLeaves());
+        ImgQuadTreeFileCreator q = new ImgQuadTreeFileCreator("smileyface.txt", 256);
+
     }
 }
