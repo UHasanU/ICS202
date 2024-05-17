@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class ImgQuadTree {
@@ -32,7 +31,7 @@ public class ImgQuadTree {
 	public ImgQuadTree(String filename){
 		try {
 			Scanner reader = new Scanner(new File(filename));
-            root = buildTree(reader, root);
+            root = buildTree(reader);
 			reader.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File is not found");
@@ -51,14 +50,15 @@ public class ImgQuadTree {
 	 * When the function finishes building the tree, it will finish the if statement and goes to the return statement,
 	 making that the base case
 	 */
-	public QTNode buildTree(Scanner reader, QTNode current) {
+	public QTNode buildTree(Scanner reader) {
 		int entry = reader.nextInt();
+		QTNode current;
 		if (entry == -1) {
 			current = new QTNode(-1);
-			current.leftNode = buildTree(reader, current.leftNode);
-			current.midLeftNode = buildTree(reader, current.midLeftNode);
-			current.midRightNode = buildTree(reader, current.midRightNode);
-			current.rightNode = buildTree(reader, current.rightNode);
+			current.leftNode = buildTree(reader);
+			current.midLeftNode = buildTree(reader);
+			current.midRightNode = buildTree(reader);
+			current.rightNode = buildTree(reader);
 		}
 		else {
 			current = new QTNode(entry);

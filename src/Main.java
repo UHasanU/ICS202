@@ -1,8 +1,5 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
-        ImgQuadTreeFileCreator q = new ImgQuadTreeFileCreator("smileyface.txt", 256);
+        ImgQuadTreeFileCreator q = new ImgQuadTreeFileCreator();
     }
 }
