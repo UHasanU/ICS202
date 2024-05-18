@@ -30,7 +30,7 @@ public class ImgQuadTree {
 	 */
 	public ImgQuadTree(String filename){
 		try (Scanner reader = new Scanner(new File(filename))) {
-                root = buildTree(reader);
+			root = buildTree(reader);
         } catch (FileNotFoundException e) {
 			System.out.println("File is not found");
 		}
