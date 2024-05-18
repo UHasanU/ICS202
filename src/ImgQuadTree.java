@@ -23,7 +23,7 @@ public class ImgQuadTree {
 		}
 	}
 
-	QTNode root = new QTNode(); // Define a global root to be used in different functions
+	QTNode root; // Define a global root to be used in different functions
 
 	/*
 	 * This function takes a file name as a string, and hand a Scanner of it to the buildTree function
@@ -69,6 +69,7 @@ public class ImgQuadTree {
 	public int getNumNodes() {
 		return getNumNodesHelper(root);
 	}
+
 	/*
 	 * This function will traverse the tree recursively adding 1 with each call, unless the current is null,
 	 in which the function will return 0, leading to the end of the function call
@@ -85,6 +86,7 @@ public class ImgQuadTree {
 	public int getNumLeaves() {
 		return getNumLeavesHelper(root);
 	}
+
 	/*
 	 * This function will traverse the tree recursively similarly to the previous function,
 	 but will only add 1 when the intensity level is not 1 i.e. there's no children, meaning it's a leaf node
@@ -92,11 +94,10 @@ public class ImgQuadTree {
 	public int getNumLeavesHelper(QTNode current) {
 		if (current == null)
 			return 0;
-		if (current.intensityLevel == -1)
-			return getNumLeavesHelper(current.leftNode) + getNumLeavesHelper(current.midLeftNode)
-					+ getNumLeavesHelper(current.midRightNode) + getNumLeavesHelper(current.rightNode);
-		else
+		if (current.intensityLevel != -1)
 			return 1;
+		return getNumLeavesHelper(current.leftNode) + getNumLeavesHelper(current.midLeftNode)
+				+ getNumLeavesHelper(current.midRightNode) + getNumLeavesHelper(current.rightNode);
 	}
 	
 	public int[][] getImageArray() {
@@ -140,13 +141,14 @@ public class ImgQuadTree {
 			
 	}
 
-	
+	// Inner class for the Quad Tree Nodes, consisting of recursive pointers, and an intensity value
 	private class QTNode {
 		protected int intensityLevel;
 		protected QTNode leftNode;
 		protected QTNode midLeftNode;
 		protected QTNode midRightNode;
 		protected QTNode rightNode;
+
 		public QTNode() {
 			intensityLevel = -1;
 			leftNode = midLeftNode = midRightNode = rightNode = null;
@@ -164,10 +166,6 @@ public class ImgQuadTree {
 			midRightNode = midRight;
 			rightNode = right;
 		}
-		
-		
-		
-		
 	}
 }
 

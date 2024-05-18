@@ -70,7 +70,7 @@ public class ImgQuadTreeFileCreator {
      * Create a print write and write the traversal line by line into a file
      */
     public void writeTraversal(ArrayList<Integer> preOrderTraversal, String filename) {
-            try (PrintWriter writer = new PrintWriter(filename.substring(0, filename.length() - 4) + "QuadTree.txt")) {
+            try (PrintWriter writer = new PrintWriter(filename.substring(0, filename.length() - 4) + "QT.txt")) {
                 for (int el : preOrderTraversal)
                     writer.println(el);
             } catch (FileNotFoundException e) {
