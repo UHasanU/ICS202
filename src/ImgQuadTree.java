@@ -29,11 +29,9 @@ public class ImgQuadTree {
 	 * This function takes a file name as a string, and hand a Scanner of it to the buildTree function
 	 */
 	public ImgQuadTree(String filename){
-		try {
-			Scanner reader = new Scanner(new File(filename));
-            root = buildTree(reader);
-			reader.close();
-		} catch (FileNotFoundException e) {
+		try (Scanner reader = new Scanner(new File(filename))) {
+                root = buildTree(reader);
+        } catch (FileNotFoundException e) {
 			System.out.println("File is not found");
 		}
 	}
